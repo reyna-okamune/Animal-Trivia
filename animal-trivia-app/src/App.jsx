@@ -43,7 +43,7 @@ function App() {
         <p>Test Your Animal Knowledge</p>
       </header>
       <div className="landing-tiger">
-        {!gameStarted && <img src="./public/free-tiger-image.png" alt="tiger-img"/>}
+        {!gameStarted && <img src="/free-tiger-image.png" alt="tiger-img"/>}
       </div>
 
       <div className='button-container'>
