@@ -5,18 +5,13 @@ import './App.css'
 function App() {
 
   const [triviaQuestions, setTriviaQuestions] = useState([])
-
+  const [gameStarted, setGameStarted] = useState(false)
   /* FETCHING OPEN TRIVIA API DATA */
   async function fetchTriviaData() {
     const response = await axios.get("https://opentdb.com/api.php?amount=10&category=27&type=multiple")
     setTriviaQuestions(response.data.results)
 
   }
-
-  useEffect(() => {
-    fetchTriviaData();
-  }, [])
-
 
   /* ORGANIZING DATA */
   /* 
@@ -30,11 +25,31 @@ function App() {
         type: "multiple"
   */
 
+  /* GAME FUNCTION HANDLING */
+  function toggleStartGame() {
+    setGameStarted(prev => !prev)
+    fetchTriviaData()
+  }
+
   /* DEBUGGING */
-  console.log(triviaQuestions)
+  console.log(gameStarted)
+
   return (
     <>
     
+      {/* landing page */}
+      <header className='header'>
+        <h1>Animal Trivia</h1>
+        <p>Test Your Animal Knowledge</p>
+      </header>
+      <div className="landing-tiger">
+        {!gameStarted && <img src="public/free-tiger-image.png" alt="tiger-img"/>}
+      </div>
+
+      <div className='button-container'>
+        {!gameStarted && <button className='start' onClick={toggleStartGame}>Start Game</button>}
+      </div>
+
     </>
   )
 }
