@@ -3,6 +3,7 @@ import axios from 'axios' // otdb api fetching
 import './App.css'
 import LandingPage from './LandingPage.jsx'
 import Question from "./Question.jsx"
+import ButtonControls from "./ButtonControls.jsx"
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
       const incorrectAnswers = triviaQuestions[count].incorrect_answers;
       const correctAnswer = triviaQuestions[count].correct_answer;
       const difficulty = triviaQuestions[count].difficulty;
+      const number = count;
 
       return (
         < Question 
@@ -60,20 +62,28 @@ function App() {
             correctAnswer={correctAnswer}
             difficulty={difficulty}
             onAnswerSelect={handleAnswerSelect}
+            number={count}
         />
       )
     }
   }
 
   function checkAnswer() {
-    setSumbitClicked(prev => !prev);
-    const correctAnswer = triviaQuestions[count].correct_answer;
-    if (selectedAnswer === correctAnswer) {
-      setPoints(prev => prev + 1)
-      console.log("correct!")
+    if (selectedAnswer.length > 0) {
+      setSumbitClicked(prev => !prev);
+      const correctAnswer = triviaQuestions[count].correct_answer;
+      if (selectedAnswer === correctAnswer) {
+        setPoints(prev => prev + 1)
+        console.log("correct!")
+      }
+      else {
+        console.log("incorrect!")
+      }
     }
+
     else {
-      console.log("incorrect!")
+      console.log("you must submit answer!");
+      return;
     }
   }
 
@@ -106,26 +116,18 @@ function App() {
               <div className="mini-tiger">
               </div>
             </div>
-            {count < triviaQuestions.length ? 
-              fetchQuestion() 
-              : 
-              <div className='results-container'>
-                <h1>Results</h1>
-                <h2>{points}</h2>
-              </div>
-            }
+            {fetchQuestion()}
           </div>
 
 
           {/* control buttons */}
-          <div className="control-buttons">
-            <button className='exit' onClick={toggleStartGame}>Exit Game</button>
-            {submitClicked ?
-              <button className='next' onClick={renderNext}>{"Next"}</button>
-              :
-              <button className='submit' onClick={checkAnswer}>{"Submit Answer"}</button>
-            }
-          </div>
+          < ButtonControls 
+              handleExit = {toggleStartGame}
+              handleSubmit = {checkAnswer}
+              handleNext = {renderNext}
+              answered = {selectedAnswer.length > 0 ? true : false}
+              submitted = {submitClicked}
+          />
         </>
       }
       

@@ -1,8 +1,14 @@
 
+.question-header {
+    display: flex;
+    padding: 10px 25px;
+    gap: 5px;
+}
+
+
 h2.question {
     font-size: 1.5rem;
     font-weight: 500;
-    padding: 10px 30px;
 }
 
 .answer-list {

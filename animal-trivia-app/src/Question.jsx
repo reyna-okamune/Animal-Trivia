@@ -28,7 +28,10 @@ export default function Question(props) {
     
     return (
         <>
-            <h2 className="question">{props.question}</h2>
+            <div className="question-header">
+                <h2 className="question">Q{props.number + 1}.</h2>
+                <h2 className="question">{props.question}</h2>
+            </div>
 
             <div className="answer-list">
                 {answers.map((item, index) => {
@@ -39,6 +42,7 @@ export default function Question(props) {
                                 className="radio-button" 
                                 name="choice-item" 
                                 value={item} 
+                                checked = {selectedOption === item}
                                 onChange={handleOptionChange}
                             />
                             {item}
