@@ -104,6 +104,16 @@ button.submit:hover {
   transition: all 0.2s ease-in;
 }
 
+button.next {
+  background-color:rgba(255, 172, 28, 0.8);
+}
+
+button.next:hover {
+  background-color:rgba(255, 172, 28, 1);
+  transform: scale(1.05);
+  transition: all 0.2s ease-in;
+}
+
 button.exit {
   background-color: rgba(139, 0, 0, 0.8);
 }
@@ -119,6 +129,48 @@ button.exit:hover {
   width: 100%;
   color: var(--dark-green);
 }
+
+.points-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mini-tiger {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.mini-tiger > img {
+  width: 15%;
+  height: auto;
+  animation: rotateBackandForth 5s linear infinite;
+
+}
+p.points {
+  font-size: 1.25rem;
+  color: var(--med-green);
+  font-weight: 500;
+}
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.results-container > h1 {
+  font-size: 1.75rem;
+}
+
+.results-container > h2 {
+  font-size: 4em;
+}
+
 @keyframes rotateBackandForth {
   0% { transform: rotate(0deg); }
   25% { transform: rotate(10deg); }
@@ -139,7 +191,7 @@ button.exit:hover {
     font-size: 1rem;
   }
 
-  button.submit , button.exit {
+  button.submit , button.next, button.exit {
     font-size: 0.75rem;
     
   }

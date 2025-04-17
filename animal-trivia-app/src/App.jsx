@@ -8,8 +8,10 @@ function App() {
 
   const [triviaQuestions, setTriviaQuestions] = useState([])
   const [gameStarted, setGameStarted] = useState(false)
-  const count = 0
-  
+  const [selectedAnswer, setSelectedAnswer] = useState("")
+  const [count, setCount] = useState(0)
+  const [points, setPoints] = useState(0)
+  const [submitClicked, setSumbitClicked] = useState(false)
   /* FETCHING OPEN TRIVIA API DATA */
   async function fetchTriviaData() {
     const response = await axios.get("https://opentdb.com/api.php?amount=10&category=27&type=multiple")
@@ -39,29 +41,16 @@ function App() {
     return question.replace(/(&quot\;)/g, "\"").replace(/(&rsquo\;)/g, "\"").replace(/(&#039\;)/g, "\'").replace(/(&amp\;)/g, "\"");
   }
 
-  function shuffleQuestions(incorrectAnswers, correctAnswer) {
-
-    let allAnswers = []
-
-    incorrectAnswers.map((item) => {
-      allAnswers.push(item);
-    })
-
-    allAnswers.push(correctAnswer);
-
-    // sort after all questions merged
-    allAnswers.sort(() => Math.random() - 0.5);
-
-    return allAnswers;
+  const handleAnswerSelect = (answer) => {
+    setSelectedAnswer(answer);
+    console.log(`answer selected: ${answer}`)
   }
 
   const fetchQuestion = () => {
     if (triviaQuestions.length > 0) {
-      
       const currentQuestion = removeCharacters(triviaQuestions[count].question);
       const incorrectAnswers = triviaQuestions[count].incorrect_answers;
       const correctAnswer = triviaQuestions[count].correct_answer;
-      const allAnswers = shuffleQuestions(incorrectAnswers, correctAnswer);
       const difficulty = triviaQuestions[count].difficulty;
 
       return (
@@ -69,15 +58,34 @@ function App() {
             question={currentQuestion}
             incorrectAnswers={incorrectAnswers}
             correctAnswer={correctAnswer}
-            answers={allAnswers}
             difficulty={difficulty}
+            onAnswerSelect={handleAnswerSelect}
         />
       )
     }
   }
 
+  function checkAnswer() {
+    setSumbitClicked(prev => !prev);
+    const correctAnswer = triviaQuestions[count].correct_answer;
+    if (selectedAnswer === correctAnswer) {
+      setPoints(prev => prev + 1)
+      console.log("correct!")
+    }
+    else {
+      console.log("incorrect!")
+    }
+  }
+
+  function renderNext() {
+    console.log("------ NEXT QUESTION ------")
+    setSumbitClicked(prev => !prev);
+    setCount(prev => prev + 1)
+    fetchQuestion()
+  }
+
   /* DEBUGGING */
-  console.log(`game started: ${gameStarted}`)
+  // console.log(`game started: ${gameStarted}`)
 
   return (
     <>
@@ -94,12 +102,29 @@ function App() {
       { gameStarted && 
         <>
           <div className='quiz-container'>
-            {fetchQuestion()}
+            <div className="points-container">
+              <div className="mini-tiger">
+              </div>
+            </div>
+            {count < triviaQuestions.length ? 
+              fetchQuestion() 
+              : 
+              <div className='results-container'>
+                <h1>Results</h1>
+                <h2>{points}</h2>
+              </div>
+            }
           </div>
+
+
           {/* control buttons */}
           <div className="control-buttons">
-            <button className='submit'>Submit Answer</button>
             <button className='exit' onClick={toggleStartGame}>Exit Game</button>
+            {submitClicked ?
+              <button className='next' onClick={renderNext}>{"Next"}</button>
+              :
+              <button className='submit' onClick={checkAnswer}>{"Submit Answer"}</button>
+            }
           </div>
         </>
       }
