@@ -28,6 +28,7 @@ export default function Question(props) {
     
     return (
         <>
+            
             <div className="question-header">
                 <h2 className="question">Q{props.number + 1}.</h2>
                 <h2 className="question">{props.question}</h2>
@@ -44,6 +45,7 @@ export default function Question(props) {
                                 value={item} 
                                 checked = {selectedOption === item}
                                 onChange={handleOptionChange}
+                                disabled={props.submitted}
                             />
                             {item}
                         </label>

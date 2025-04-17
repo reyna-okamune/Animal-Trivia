@@ -13,6 +13,7 @@ function App() {
   const [count, setCount] = useState(0)
   const [points, setPoints] = useState(0)
   const [submitClicked, setSumbitClicked] = useState(false)
+  const [gameFinished, setGameFinished] = useState(false)
   /* FETCHING OPEN TRIVIA API DATA */
   async function fetchTriviaData() {
     const response = await axios.get("https://opentdb.com/api.php?amount=10&category=27&type=multiple")
@@ -48,12 +49,13 @@ function App() {
   }
 
   const fetchQuestion = () => {
-    if (triviaQuestions.length > 0) {
+    if (triviaQuestions.length > 0 && count < triviaQuestions.length) {
       const currentQuestion = removeCharacters(triviaQuestions[count].question);
       const incorrectAnswers = triviaQuestions[count].incorrect_answers;
       const correctAnswer = triviaQuestions[count].correct_answer;
       const difficulty = triviaQuestions[count].difficulty;
       const number = count;
+      
 
       return (
         < Question 
@@ -62,7 +64,8 @@ function App() {
             correctAnswer={correctAnswer}
             difficulty={difficulty}
             onAnswerSelect={handleAnswerSelect}
-            number={count}
+            number={number}
+            submitted={submitClicked}
         />
       )
     }
@@ -88,10 +91,18 @@ function App() {
   }
 
   function renderNext() {
-    console.log("------ NEXT QUESTION ------")
-    setSumbitClicked(prev => !prev);
-    setCount(prev => prev + 1)
-    fetchQuestion()
+    // final score
+    if (count >= triviaQuestions.length) {
+      setGameFinished(true)
+      console.log(`finished: ${gameFinished}`)
+    }
+
+    else {
+      console.log("------ NEXT QUESTION ------")
+      setSumbitClicked(prev => !prev);
+      setCount(prev => prev + 1)
+      fetchQuestion()
+    }
   }
 
   /* DEBUGGING */
@@ -110,26 +121,33 @@ function App() {
       
       {/* quiz page */}
       { gameStarted && 
-        <>
-          <div className='quiz-container'>
-            <div className="points-container">
-              <div className="mini-tiger">
-              </div>
+            <div className='quiz-container'>
+              {fetchQuestion()}
             </div>
-            {fetchQuestion()}
-          </div>
+      }
 
-
+      {gameStarted &&
+        <>
           {/* control buttons */}
           < ButtonControls 
-              handleExit = {toggleStartGame}
-              handleSubmit = {checkAnswer}
-              handleNext = {renderNext}
-              answered = {selectedAnswer.length > 0 ? true : false}
-              submitted = {submitClicked}
+            handleExit = {toggleStartGame}
+            handleSubmit = {checkAnswer}
+            handleNext = {renderNext}
+            answered = {selectedAnswer.length > 0 ? true : false}
+            submitted = {submitClicked}
+            count = {count}
           />
-        </>
+      </>
       }
+
+      {gameFinished &&
+          <div className="results-container">
+            <h1>Final Score</h1>
+            <h2>{points}</h2>
+          </div>
+        }
+
+
       
 
     </>

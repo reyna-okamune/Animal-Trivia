@@ -82,7 +82,13 @@ button.start:hover {
   padding: 0 20px;
 }
 
-button.submit, button.next, button.exit {
+.new-control-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button.submit, button.next, button.exit, button.new {
   font-size: 1rem;
   font-weight: 500;
   background-color: var(--dark-green-pre-hover);
@@ -125,8 +131,18 @@ button.exit:hover {
   transition: all 0.2s ease-in;
 }
 
+button.new {
+  background-color: rgba(82, 32, 132, 0.8);
+}
+
+button.new:hover {
+  background-color: rgba(82, 32, 132, 1);
+  transform: scale(1.05);
+  transition: all 0.2s ease-in;
+}
+
+
 .quiz-container {
-  width: 100%;
   color: var(--dark-green);
 }
 
@@ -191,7 +207,7 @@ p.points {
     font-size: 1rem;
   }
 
-  button.submit , button.next, button.exit {
+  button.submit , button.next, button.exit, button.new {
     font-size: 0.75rem;
     
   }
