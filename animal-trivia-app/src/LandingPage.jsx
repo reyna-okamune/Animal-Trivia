@@ -5,7 +5,7 @@ export default function LandingPage(props) {
                 <img src="/free-tiger-image.png" alt="tiger-img"/>
             </div>
 
-            <div className='button-container'>
+            <div className='start-button-container'>
                 <button className='start' onClick={props.handleClick}>Start Game</button>
             </div>
       </>

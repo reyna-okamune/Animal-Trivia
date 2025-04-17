@@ -39,19 +39,37 @@ function App() {
     return question.replace(/(&quot\;)/g, "\"").replace(/(&rsquo\;)/g, "\"").replace(/(&#039\;)/g, "\'").replace(/(&amp\;)/g, "\"");
   }
 
+  function shuffleQuestions(incorrectAnswers, correctAnswer) {
+
+    let allAnswers = []
+
+    incorrectAnswers.map((item) => {
+      allAnswers.push(item);
+    })
+
+    allAnswers.push(correctAnswer);
+
+    // sort after all questions merged
+    allAnswers.sort(() => Math.random() - 0.5);
+
+    return allAnswers;
+  }
+
   const fetchQuestion = () => {
     if (triviaQuestions.length > 0) {
       
-      const currentQuestion = removeCharacters(triviaQuestions[count].question)
-      const incorrectAnswers = triviaQuestions[count].incorrect_answers
-      const correctAnswer = triviaQuestions[count].correct_answer
-      const difficulty = triviaQuestions[count].difficulty
+      const currentQuestion = removeCharacters(triviaQuestions[count].question);
+      const incorrectAnswers = triviaQuestions[count].incorrect_answers;
+      const correctAnswer = triviaQuestions[count].correct_answer;
+      const allAnswers = shuffleQuestions(incorrectAnswers, correctAnswer);
+      const difficulty = triviaQuestions[count].difficulty;
 
       return (
         < Question 
             question={currentQuestion}
             incorrectAnswers={incorrectAnswers}
             correctAnswer={correctAnswer}
+            answers={allAnswers}
             difficulty={difficulty}
         />
       )
@@ -73,9 +91,19 @@ function App() {
       {!gameStarted && < LandingPage handleClick={toggleStartGame}/>}
       
       {/* quiz page */}
-      <div className='quiz-container'>
-        {fetchQuestion()}
-      </div>
+      { gameStarted && 
+        <>
+          <div className='quiz-container'>
+            {fetchQuestion()}
+          </div>
+          {/* control buttons */}
+          <div className="control-buttons">
+            <button className='submit'>Submit Answer</button>
+            <button className='exit' onClick={toggleStartGame}>Exit Game</button>
+          </div>
+        </>
+      }
+      
 
     </>
   )

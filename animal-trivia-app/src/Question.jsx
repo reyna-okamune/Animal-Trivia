@@ -1,17 +1,17 @@
 import React from "react"
+import "./Question.css"
 export default function Question(props) {
+    
+    console.log(`all answer options before sort: ${props.answers}`)
 
-    const [answers, setAnswers] = React.useState([...props.incorrectAnswers, props.correctAnswer])
-
-    console.log(`all answer options: ${answers}`)
     return (
         <>
-            <p>{props.question}</p>
+            <h2 className="question">{props.question}</h2>
 
-            <ul>
-                {answers.map((item, index) => {
+            <ul className="answer-list">
+                {props.answers.map((item, index) => {
                     return (
-                        <p key={index}>{item}</p>
+                        <li key={index} className="choice">{item}</li>
                     )
                 })}
             </ul>

@@ -1,0 +1,24 @@
+
+h2.question {
+    border: 2px solid red;
+    font-size: 1.75rem;
+    font-weight: 500;
+    padding: 10px 30px;
+}
+
+ul.answer-list {
+    list-style: none;
+}
+
+li.choice {
+    font-size: 1.25rem;
+    font-weight: 500;
+    padding: 20px 30px;
+}
+
+
+@media (max-width: 390px) {
+    .question {
+        font-size: 1rem;
+    }
+}
