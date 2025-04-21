@@ -28,29 +28,30 @@ export default function Question(props) {
     
     return (
         <>
-            
-            <div className="question-header">
-                <h2 className="question">Q{props.number + 1}.</h2>
-                <h2 className="question">{props.question}</h2>
-            </div>
+            <div className="fade-in">
+                <div className="question-header">
+                    <h2 className="question">{props.question}</h2>
+                </div>
 
-            <div className="answer-list">
-                {answers.map((item, index) => {
-                    return (
-                        <label key={index} className="choice">
-                            <input 
-                                type="radio" 
-                                className="radio-button" 
-                                name="choice-item" 
-                                value={item} 
-                                checked = {selectedOption === item}
-                                onChange={handleOptionChange}
-                                disabled={props.submitted}
-                            />
-                            {item}
-                        </label>
-                    )
-                })}
+                <div className="answer-list">
+                    {answers.map((item, index) => {
+                        return (
+                            <label key={index} className="choice">
+                                <input 
+                                    type="radio" 
+                                    className="radio-button" 
+                                    name="choice-item" 
+                                    value={item} 
+                                    checked = {selectedOption === item}
+                                    onChange={handleOptionChange}
+                                    disabled={props.submitted}
+                                />
+                                {item}
+                            </label>
+                        )
+                    })}
+                </div>
+
             </div>
         </>
         
