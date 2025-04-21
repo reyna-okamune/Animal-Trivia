@@ -14,6 +14,7 @@ function App() {
   const [points, setPoints] = useState(0)
   const [submitClicked, setSumbitClicked] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
+  const [feedback, setFeedback]= useState("")
   /* FETCHING OPEN TRIVIA API DATA */
   async function fetchTriviaData() {
     const response = await axios.get("https://opentdb.com/api.php?amount=10&category=27&type=multiple")
@@ -23,8 +24,23 @@ function App() {
   /* GAME FUNCTION HANDLING */
   function toggleStartGame() {
     setGameStarted(prev => !prev)
-    fetchTriviaData()
   }
+
+  useEffect(() => {
+    if (gameStarted) {
+      fetchTriviaData()
+    } else {
+      resetGame()
+    }
+  }, [gameStarted])
+
+  useEffect(() => {
+    if (count === triviaQuestions.length && triviaQuestions.length > 0) {
+      setGameFinished(true);
+    }
+  }, [count, triviaQuestions]);
+  
+
 
   /* ORGANIZING DATA */
   /* 
@@ -45,7 +61,7 @@ function App() {
 
   const handleAnswerSelect = (answer) => {
     setSelectedAnswer(answer);
-    console.log(`answer selected: ${answer}`)
+    // console.log(`answer selected: ${answer}`)
   }
 
   const fetchQuestion = () => {
@@ -77,36 +93,59 @@ function App() {
       const correctAnswer = triviaQuestions[count].correct_answer;
       if (selectedAnswer === correctAnswer) {
         setPoints(prev => prev + 1)
-        console.log("correct!")
+        setFeedback(`Correct! It's ${selectedAnswer}! ˙ᵕ˙`)
+        // console.log("correct!")
       }
       else {
-        console.log("incorrect!")
+        setFeedback(`Incorrect! It's ${correctAnswer}! °՞(ᗒᗣᗕ)՞°`)
+        // console.log("incorrect!")
       }
     }
 
     else {
-      console.log("you must submit answer!");
+      setFeedback("Please Sumbit Answer! ( ｡ •̀ ᴖ •́ ｡)💢")
+      // console.log("you must submit answer!");
       return;
     }
   }
 
   function renderNext() {
-    // final score
-    if (count >= triviaQuestions.length) {
-      setGameFinished(true)
-      console.log(`finished: ${gameFinished}`)
-    }
+    if (!submitClicked) return;
 
-    else {
-      console.log("------ NEXT QUESTION ------")
-      setSumbitClicked(prev => !prev);
-      setCount(prev => prev + 1)
-      fetchQuestion()
-    }
+    setSumbitClicked(false);
+    setSelectedAnswer(""); 
+    setFeedback("");
+
+    // Move to next question
+    setCount(prev => prev + 1);
+  }
+
+  function renderNewGame() {
+    resetGame();
+    setGameStarted(true);
+  }
+
+  function resetGame() {
+    setCount(0);
+    setPoints(0);
+    setCount(0);
+    setPoints(0);
+    setGameStarted(false);
+    setSelectedAnswer("");
+    setSumbitClicked(false);
+    setGameFinished(false);
+    setFeedback("");
+    setTriviaQuestions([]);
   }
 
   /* DEBUGGING */
-  // console.log(`game started: ${gameStarted}`)
+  console.log("--------------------------")
+  console.log(`game started: ${gameStarted}`)
+  console.log(`game finished: ${gameFinished}`)
+  console.log(`question ${count}`)
+  console.log(`points ${points}`)
+  console.log(`feedback ${feedback}`)
+  console.log("--------------------------")
 
   return (
     <>
@@ -120,10 +159,24 @@ function App() {
       {!gameStarted && < LandingPage handleClick={toggleStartGame}/>}
       
       {/* quiz page */}
-      { gameStarted && 
+      { (gameStarted && !gameFinished) && 
+          <div>
             <div className='quiz-container'>
-              {fetchQuestion()}
+              {!gameFinished && fetchQuestion()}
             </div>
+
+            <div className="feedback-container">
+              {submitClicked ? <p>{feedback}</p> : <p> </p>}
+            </div>
+          </div>
+      }
+
+      {/* results once game is finished */}
+      {gameFinished &&
+          <div className="results-container">
+            <h1>Final Score</h1>
+            <h2>{points}</h2>
+          </div>
       }
 
       {gameStarted &&
@@ -133,6 +186,7 @@ function App() {
             handleExit = {toggleStartGame}
             handleSubmit = {checkAnswer}
             handleNext = {renderNext}
+            handleNew ={renderNewGame}
             answered = {selectedAnswer.length > 0 ? true : false}
             submitted = {submitClicked}
             count = {count}
@@ -140,12 +194,7 @@ function App() {
       </>
       }
 
-      {gameFinished &&
-          <div className="results-container">
-            <h1>Final Score</h1>
-            <h2>{points}</h2>
-          </div>
-        }
+      
 
 
       

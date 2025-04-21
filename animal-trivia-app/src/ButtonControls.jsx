@@ -4,14 +4,15 @@ export default function ButtonControls(props) {
     // console.log(`submitted: ${props.submitted}`)
     // hard coding last question value
     const last = 9;
-    console.log(`count: ${props.count}`)
+    // console.log(`count: ${props.count}`)
     return (
         <>
             <div className="fade-in">
                 { props.count > last ?
 
-                    <div className="new-control-button">
-                        <button className='new' >New Game</button>
+                    <div className="control-buttons">
+                        <button className='exit' onClick={props.handleExit}>Exit Game</button>
+                        <button className='new' onClick={props.handleNew}>New Game</button>
                     </div>
 
                     :

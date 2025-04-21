@@ -3,7 +3,7 @@
     --dark-green: #103713;
     --dark-green-pre-hover: rgba(16, 55, 19, 0.8);
     --med-green: #628b35;
-    --light-green: rgba(98, 139, 53, 0.8);
+    --light-green: rgba(98, 139, 53, 0.5);
 }
 
 * {
@@ -146,15 +146,25 @@ button.new:hover {
 
 .quiz-container {
   color: var(--dark-green);
-  min-height: 300px;
-  max-height: 300px;
+  min-height: 350px;
   width: 100%; 
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid orange;
 }
 
+.feedback-container {
+  padding-top: 30px;
+  height: 40px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedback-container p {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
 .points-container {
   display: flex;
   flex-direction: column;
