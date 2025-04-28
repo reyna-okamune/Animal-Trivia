@@ -4,6 +4,7 @@ import './App.css'
 import LandingPage from './LandingPage.jsx'
 import Question from "./Question.jsx"
 import ButtonControls from "./ButtonControls.jsx"
+import Confetti from 'react-confetti'
 
 function App() {
 
@@ -15,6 +16,18 @@ function App() {
   const [submitClicked, setSumbitClicked] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
   const [feedback, setFeedback]= useState("")
+  const [windowDimension, setWindowDimension] = useState({ width: window.innerWidth, height: window.innerHeight });
+
+  /* WINDOW RESIZE */
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimension({ width: window.innerWidth, height: window.innerHeight });
+    }
+  
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   /* FETCHING OPEN TRIVIA API DATA */
   async function fetchTriviaData() {
     const response = await axios.get("https://opentdb.com/api.php?amount=10&category=27&type=multiple")
@@ -23,16 +36,15 @@ function App() {
   
   /* GAME FUNCTION HANDLING */
   function toggleStartGame() {
-    setGameStarted(prev => !prev)
-  }
-
-  useEffect(() => {
     if (gameStarted) {
-      fetchTriviaData()
+      resetGame();
+      setGameStarted(false);
     } else {
-      resetGame()
+      fetchTriviaData();
+      setGameStarted(true);
     }
-  }, [gameStarted])
+  }
+  
 
   useEffect(() => {
     if (count === triviaQuestions.length && triviaQuestions.length > 0) {
@@ -120,8 +132,9 @@ function App() {
     setCount(prev => prev + 1);
   }
 
-  function renderNewGame() {
+  async function renderNewGame() {
     resetGame();
+    await fetchTriviaData();
     setGameStarted(true);
   }
 
@@ -130,7 +143,6 @@ function App() {
     setPoints(0);
     setCount(0);
     setPoints(0);
-    setGameStarted(false);
     setSelectedAnswer("");
     setSumbitClicked(false);
     setGameFinished(false);
@@ -173,10 +185,13 @@ function App() {
 
       {/* results once game is finished */}
       {gameFinished &&
+        <>
+          
           <div className="results-container">
             <h1>Final Score</h1>
             <h2>{points}</h2>
           </div>
+        </>
       }
 
       {gameStarted &&
@@ -190,6 +205,7 @@ function App() {
             answered = {selectedAnswer.length > 0 ? true : false}
             submitted = {submitClicked}
             count = {count}
+            className='button-menu'
           />
       </>
       }
