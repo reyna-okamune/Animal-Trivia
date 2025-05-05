@@ -16,7 +16,7 @@ _This project showcases dynamic question rendering, score tracking, and a clean 
 ## 🛠️ Tech Stack
 
 - [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
+- CSS
 - [Vite](https://vitejs.dev/) – fast and lightweight development tooling
 - [Vercel](https://vercel.com/) – for deployment
 
